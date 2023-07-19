@@ -5,61 +5,63 @@ import {useEffect, useState} from "react";
 import { suspend } from "suspend-react";
 import { Suspense } from "react";
 
-
-async function getRandomArtwork(setArtwork, setError) {
+async function getRandomArtwork() {
     let artworkData = null;
-    let imageId = '';
     let randomId = 0;
-    let errorCount = 0
+    let errorCount = 0;
+    let artWorkFound = false;
 
-    while (!artworkData && errorCount < 10) {
+    while (!artWorkFound) {
         randomId = Math.floor(Math.random() * 100000);
-        try {
-            const response = await fetch(`https://api.artic.edu/api/v1/artworks/${randomId}?fields=id,title,image_id,artist_display`);
-            if (response.ok) {
-                artworkData = await response.json();
-                imageId = artworkData.data.image_id;
-            } else {
-                errorCount++;
-            }
-        } catch (error) {
+        const response = await fetch(`https://api.artic.edu/api/v1/artworks/${randomId}?fields=id,title,image_id,artist_display`);
+
+        if (response.ok) {
+            console.log('res ok');
+            artWorkFound = true;
+            artworkData = await response.json();
+            let imageId = artworkData.data.image_id;
+            console.log(imageId);
+        } else {
+            console.log("res pas ok");
             errorCount++;
         }
     }
 
-    if (artworkData) {
-        setArtwork({
-            ...artworkData.data,
-            imageUrl: `https://www.artic.edu/iiif/2/${imageId}/full/403,/0/default.jpg`
-        });
-    } else {
-        setError(new Error('Impossible de récupérer une œuvre d\'art.'));
-    }
+    return artworkData;
 }
 
-export default function Artwork()
-{
-    const texture = useTexture('https://www.artic.edu/iiif/2/743f53b8-eb8b-4d12-3031-20e2c31c1f26/full/403,/0/default.jpg')
-    const [artwork, setArtwork] = useState(null);
-    const [error, setError] = useState(null);
+function GetRandomArtwork() {
+    const ArtworkData = suspend(getRandomArtwork);
 
-    useEffect(() => {
-        getRandomArtwork(setArtwork, setError);
-    }, []);
-
-    if(artwork){
-
-        // console.log(artwork.imageUrl)
-        // texture2 = useTexture(artwork.imageUrl)
+    if (ArtworkData.error) {
+        return console.log('erreur')
     }
 
-    return (<>
-            <mesh>
-                <planeGeometry args={ [15,15] } />
-                <meshStandardMaterial map={texture} />
-                {/*<meshStandardMaterial map={artwork.imageUrl} />*/}
-            </mesh>
-        </>
+    if (!ArtworkData.data) {
+        return console.log("loading")
+    }
 
-    )
+    const artwork = ArtworkData.data;
+    const imageUrl = useTexture(`https://www.artic.edu/iiif/2/${artwork.image_id}/full/403,/0/default.jpg`)
+
+    console.log(imageUrl)
+
+    return (
+        <mesh>
+            <planeGeometry args={[15, 15]} />
+            <meshStandardMaterial map={imageUrl} />
+        </mesh>
+    );
+}
+
+export default function Artwork() {
+    return (
+        <Suspense fallback={console.log("waiting .....")}>
+            <GetRandomArtwork />
+        </Suspense>,
+
+    <Suspense fallback={console.log("waiting .....")}>
+        <GetRandomArtwork />
+    </Suspense>
+    );
 }
