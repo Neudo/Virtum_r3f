@@ -1,7 +1,9 @@
 import { DoubleSide } from 'three';
-import {Box, Center, useTexture} from '@react-three/drei';
+import {Box, Center, useMatcapTexture, useTexture} from '@react-three/drei';
 import { suspend } from "suspend-react";
 import { Suspense } from "react";
+import {useControls} from "leva";
+
 
 async function getRandomArtwork() {
     let artworkData = null;
@@ -25,7 +27,20 @@ async function getRandomArtwork() {
 }
 
 function GetRandomArtwork() {
+
     const ArtworkData = suspend(getRandomArtwork);
+    const [matcapTextutre] = useMatcapTexture('161B1F_C7E0EC_90A5B3_7B8C9B', 256)
+    const { artWorkPosition } = useControls('Artwork position', {
+        artWorkPosition: { value: [ 0,0,0.7] }
+    })
+    const { artWorkVersoPosition } = useControls('Artwork verso position', {
+        artWorkVersoPosition: { value: [ 0,0,-0.7] }
+    })
+    const { wallSize } = useControls('Wall sizes', {
+        wallSize: { value: [ 20,20,-2] }
+    })
+
+
 
     if (ArtworkData.error) {
         return console.log('erreur')
@@ -40,11 +55,17 @@ function GetRandomArtwork() {
 
 
     return (<>
-        <mesh>
+        <mesh position={artWorkPosition}>
             <planeGeometry args={[15, 15]} />
             <meshStandardMaterial map={imageUrl} />
         </mesh>
-            <Box args={[10,10,1]} material-color="white" />
+            <Box castShadow args={wallSize} material-color="white" >
+                <meshMatcapMaterial matcap={matcapTextutre} />
+            </Box>
+            <mesh position={artWorkVersoPosition} rotation-y={- Math.PI * 1} >
+                <planeGeometry args={[15, 15]} />
+                <meshStandardMaterial map={imageUrl} />
+            </mesh>
         </>
     );
 

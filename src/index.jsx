@@ -17,7 +17,7 @@ function App()
                 fear: 100,
                 position: [-5,4,23]
             } } >
-                <ambientLight intensity={2} />
+                <ambientLight  intensity={2} />
 
                 <Experience/>
             </Canvas>
