@@ -1,5 +1,4 @@
-import { DoubleSide } from 'three';
-import {Box, Center, useMatcapTexture, useTexture} from '@react-three/drei';
+import {Box, useMatcapTexture, useTexture} from '@react-three/drei';
 import { suspend } from "suspend-react";
 import { Suspense } from "react";
 import {useControls} from "leva";
@@ -7,15 +6,15 @@ import {useControls} from "leva";
 
 async function getRandomArtwork() {
     let artworkData = null;
+    let artworkDataVerso = null;
     let randomId = 0;
     let errorCount = 0;
     let artWorkFound = false;
-    console.log(artWorkFound)
+    let artWorkVersoFound=false
 
     while (!artWorkFound) {
-        randomId = Math.floor(Math.random() * 100000);
+    randomId = Math.floor(Math.random() * 100000);
         const response = await fetch(`https://api.artic.edu/api/v1/artworks/${randomId}?fields=id,title,image_id,artist_display`);
-
         if (response.ok) {
             artWorkFound = true;
             artworkData = await response.json();
@@ -23,36 +22,44 @@ async function getRandomArtwork() {
             errorCount++;
         }
     }
-    return artworkData;
+
+    while(!artWorkVersoFound) {
+        randomId = Math.floor(Math.random() * 100000);
+        const response = await fetch(`https://api.artic.edu/api/v1/artworks/${randomId}?fields=id,title,image_id,artist_display`);
+        if (response.ok) {
+            artWorkVersoFound = true;
+            artworkDataVerso = await response.json();
+        } else {
+            errorCount++;
+        }
+    }
+
+    return [artworkData, artworkDataVerso] ;
 }
 
 function GetRandomArtwork() {
 
     const ArtworkData = suspend(getRandomArtwork);
+    console.log(ArtworkData)
     const [matcapTextutre] = useMatcapTexture('161B1F_C7E0EC_90A5B3_7B8C9B', 256)
     const { artWorkPosition } = useControls('Artwork position', {
-        artWorkPosition: { value: [ 0,0,0.7] }
+        artWorkPosition: { value: [ 0,0,1.1] }
     })
     const { artWorkVersoPosition } = useControls('Artwork verso position', {
-        artWorkVersoPosition: { value: [ 0,0,-0.7] }
+        artWorkVersoPosition: { value: [ 0,0,-1.1] }
     })
     const { wallSize } = useControls('Wall sizes', {
-        wallSize: { value: [ 20,20,-2] }
+        wallSize: { value: [ 20,20,2] }
     })
-
-
 
     if (ArtworkData.error) {
         return console.log('erreur')
     }
 
-    if (!ArtworkData.data) {
-        return console.log("loading")
-    }
-
-    const artwork = ArtworkData.data;
+    const artwork = ArtworkData[0].data
+    const artworkVerso= ArtworkData[1].data
     const imageUrl = useTexture(`https://www.artic.edu/iiif/2/${artwork.image_id}/full/403,/0/default.jpg`)
-
+    const imageUrlVerso = useTexture(`https://www.artic.edu/iiif/2/${artworkVerso.image_id}/full/403,/0/default.jpg`)
 
     return (<>
         <mesh position={artWorkPosition}>
@@ -64,14 +71,12 @@ function GetRandomArtwork() {
             </Box>
             <mesh position={artWorkVersoPosition} rotation-y={- Math.PI * 1} >
                 <planeGeometry args={[15, 15]} />
-                <meshStandardMaterial map={imageUrl} />
+                <meshStandardMaterial map={imageUrlVerso} />
             </mesh>
         </>
     );
 
 }
-
-
 
 export default function Artwork() {
 
