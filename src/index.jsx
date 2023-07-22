@@ -15,7 +15,7 @@ function App()
                 fov: 90,
                 near: .01,
                 fear: 100,
-                position: [-5,4,23]
+                position: [-5,4,63]
             } } >
                 <ambientLight  intensity={2} />
                 <Experience/>

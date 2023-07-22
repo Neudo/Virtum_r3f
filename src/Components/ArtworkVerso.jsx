@@ -5,7 +5,7 @@ import {useControls} from "leva";
 import Wall from "./Wall.jsx";
 
 
-async function getRandomArtwork() {
+async function getRandomArtworkVerso() {
     let artworkData = null;
     let randomId = 0;
     let artWorkFound = false;
@@ -23,18 +23,18 @@ async function getRandomArtwork() {
     return artworkData ;
 }
 
-function GetRandomArtwork() {
-    const ArtworkData = suspend(getRandomArtwork);
+function GetRandomArtworkVerso() {
 
-    const { artWorkPosition } = useControls('Artwork position', {
-        artWorkPosition: { value: [ 0,15,1.1] }
+    const ArtworkData = suspend(getRandomArtworkVerso);
+
+    const { artWorkVersoPosition } = useControls('Artwork verso position', {
+        artWorkVersoPosition: { value: [0, 15,-1.1] }
     })
-
     const artwork = ArtworkData.data
     const imageUrl = useTexture(`https://www.artic.edu/iiif/2/${artwork.image_id}/full/403,/0/default.jpg`)
 
     return (<>
-        <mesh position={artWorkPosition} >
+        <mesh position={artWorkVersoPosition} rotation-y={Math.PI * 1} >
             <planeGeometry args={[30, 30]} />
             <meshStandardMaterial map={imageUrl} />
         </mesh>
@@ -43,11 +43,11 @@ function GetRandomArtwork() {
 
 }
 
-export default function Artwork() {
+export default function ArtworkVerso() {
 
     return (
         <Suspense fallback={console.log("waiting .....")}>
-            <GetRandomArtwork />
+            <GetRandomArtworkVerso />
         </Suspense>
     );
 }
