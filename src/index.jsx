@@ -18,7 +18,6 @@ function App()
                 position: [-5,4,23]
             } } >
                 <ambientLight  intensity={2} />
-
                 <Experience/>
             </Canvas>
             </StrictMode>

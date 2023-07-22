@@ -18,8 +18,6 @@ async function getRandomArtwork() {
         if (response.ok) {
             artWorkFound = true;
             artworkData = await response.json();
-        } else {
-            errorCount++;
         }
     }
 
@@ -29,8 +27,6 @@ async function getRandomArtwork() {
         if (response.ok) {
             artWorkVersoFound = true;
             artworkDataVerso = await response.json();
-        } else {
-            errorCount++;
         }
     }
 
@@ -41,7 +37,7 @@ function GetRandomArtwork() {
 
     const ArtworkData = suspend(getRandomArtwork);
     console.log(ArtworkData)
-    const [matcapTextutre] = useMatcapTexture('161B1F_C7E0EC_90A5B3_7B8C9B', 256)
+    const [matcapTextutre] = useMatcapTexture('474444_7B7575_9E9899_8C8C8B', 1024)
     const { artWorkPosition } = useControls('Artwork position', {
         artWorkPosition: { value: [ 0,0,1.1] }
     })
