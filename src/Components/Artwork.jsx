@@ -18,13 +18,28 @@ async function getRandomArtwork() {
             artworkData = await response.json();
         }
     }
-
-
     return artworkData ;
 }
 
+    const nextArtworkData = null
+function callGetRandomArtwork() {
+    getRandomArtwork().then(artworkData => {
+    }).catch(error => {
+        console.error('Erreur lors de la récupération de l\'artwork :', error);
+    });
+
+    return nextArtworkData
+}
+
+const interval = setInterval(callGetRandomArtwork, 10000); // 10000 millisecondes = 10 secondes
+
+
+
 function GetRandomArtwork() {
     const ArtworkData = suspend(getRandomArtwork);
+    const NextArtworkData = nextArtworkData
+
+    console.log(NextArtworkData)
 
     const { artWorkPosition } = useControls('Artwork position', {
         artWorkPosition: { value: [ 0,15,1.1] }
@@ -42,6 +57,7 @@ function GetRandomArtwork() {
     );
 
 }
+
 
 export default function Artwork() {
 
