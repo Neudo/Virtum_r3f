@@ -1,8 +1,7 @@
-import {Box, useMatcapTexture, useTexture} from '@react-three/drei';
+import {useTexture} from '@react-three/drei';
 import { suspend } from "suspend-react";
-import { Suspense } from "react";
+import {Suspense, useEffect, useState} from "react";
 import {useControls} from "leva";
-import Wall from "./Wall.jsx";
 
 
 async function getRandomArtworkVerso() {
@@ -23,20 +22,44 @@ async function getRandomArtworkVerso() {
     return artworkData ;
 }
 
-function GetRandomArtworkVerso() {
+let nextArtworkData = null
+function callGetRandomArtworkVerso() {
+    getRandomArtworkVerso().then(artworkData => {
+        nextArtworkData = artworkData
+    }).catch(error => {
+        console.error('Erreur lors de la récupération de l\'artwork :', error);
+    });
 
+    return nextArtworkData
+}
+
+const interval = setInterval(callGetRandomArtworkVerso, 20000); // 10000 millisecondes = 10 secondes
+
+
+function GetRandomArtworkVerso() {
     const ArtworkData = suspend(getRandomArtworkVerso);
 
     const { artWorkVersoPosition } = useControls('Artwork verso position', {
         artWorkVersoPosition: { value: [0, 15,-1.1] }
     })
-    const artwork = ArtworkData.data
-    const imageUrl = useTexture(`https://www.artic.edu/iiif/2/${artwork.image_id}/full/403,/0/default.jpg`)
+
+    let artwork = ""
+    let imageUrl = ""
+    let nextArtwork= null
+    let nextImageUrl = null
+
+    if(nextArtworkData === null){
+        artwork = ArtworkData.data
+        imageUrl  = useTexture(`https://www.artic.edu/iiif/2/${artwork.image_id}/full/403,/0/default.jpg`)
+    } else {
+        nextArtwork = nextArtworkData.data
+        nextImageUrl = useTexture(`https://www.artic.edu/iiif/2/${nextArtwork.image_id}/full/403,/0/default.jpg`)
+    }
 
     return (<>
         <mesh position={artWorkVersoPosition} rotation-y={Math.PI * 1} >
             <planeGeometry args={[30, 30]} />
-            <meshStandardMaterial map={imageUrl} />
+            <meshStandardMaterial map={nextArtwork === null  ? imageUrl : nextImageUrl} />
         </mesh>
         </>
     );
@@ -44,6 +67,19 @@ function GetRandomArtworkVerso() {
 }
 
 export default function ArtworkVerso() {
+    const [artworkData, setArtworkData] = useState(null);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            getRandomArtworkVerso().then(artworkData => {
+                setArtworkData(artworkData); // Mettre à jour l'artworkData
+            }).catch(error => {
+                console.error('Erreur lors de la récupération de l\'artwork :', error);
+            });
+        }, 10000); // 10000 millisecondes = 10 secondes
+
+        // Pour arrêter l'appel de la fonction lorsque le composant est démonté
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <Suspense fallback={console.log("waiting .....")}>

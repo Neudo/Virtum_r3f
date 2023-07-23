@@ -18,7 +18,7 @@ export default function Experience()
 
     useFrame((state, delta) =>
     {
-        groupeRef.current.rotation.y += delta * .3
+        groupeRef.current.rotation.y += delta * .1
     })
 
 
