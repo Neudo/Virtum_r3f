@@ -17,10 +17,11 @@ async function getRandomArtworkVerso() {
             artworkData = await response.json();
         }
     }
-
-
     return artworkData ;
 }
+
+const delay = setInterval(getRandomArtworkVerso, 40000); // 10000 millisecondes = 10 secondes
+
 
 let nextArtworkData = null
 function callGetRandomArtworkVerso() {

@@ -31,7 +31,7 @@ function callGetRandomArtwork() {
     return nextArtworkData
 }
 
-const interval = setInterval(callGetRandomArtwork, 20000); // 10000 millisecondes = 10 secondes
+const interval = setInterval(callGetRandomArtwork, 40000);
 
 
 
