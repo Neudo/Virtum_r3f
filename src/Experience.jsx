@@ -1,14 +1,11 @@
 import {useFrame, extend, useThree} from "@react-three/fiber";
 import {useRef} from "react";
 import {
-    BakeShadows,
     Float,
-    MeshReflectorMaterial,
     OrbitControls,
     Plane, SoftShadows,
     useHelper,
     useMatcapTexture,
-    useTexture
 } from "@react-three/drei";
 import Artwork from "./Components/Artwork.jsx";
 import Wall from "./Components/Wall.jsx";
@@ -36,8 +33,6 @@ export default function Experience()
     useFrame((state, delta) =>
     {
         groupeRef.current.rotation.y += delta * .1
-        groupeRef.current.position.y += delta * .1
-
     })
 
 
