@@ -20,13 +20,28 @@ export default function Experience()
     useFrame((state, delta) =>
     {
         groupeRef.current.rotation.y += delta * .1
-        // groupeRef.current.position.y += delta * .1
+        groupeRef.current.position.y += delta * .1
+
     })
 
 
     return <>
         <OrbitControls args={ [ camera, gl.domElement ] } />
-        <directionalLight castShadow position={ [ 1, 2, 3 ] } intensity={ 1.6 } />
+        <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
+        <directionalLight
+            ref={ directionalLight }
+            position={ Lights }
+            intensity={ 1.6 }
+            castShadow
+            shadow-mapSize={ [1024 * 2, 1024 * 2] }
+            shadow-camera-near={1}
+            // shadow-camera-far={10}
+            shadow-camera-top={ 5 }
+            shadow-camera-right={ 5 }
+            shadow-camera-bottom={ -5 }
+            shadow-camera-left={ -5 }
+
+        />
         <Float
             rotationIntensity={0}
             floatIntensity={1}
@@ -39,9 +54,9 @@ export default function Experience()
                 <ArtworkVerso />
             </group>
         </Float>
-        <Plane  receiveShadow position-y={ - 15 } rotation-x={ - Math.PI * 0.5 } scale={ 7 } args={[10, 10, 128,128]}  >
-            {/*<meshStandardMaterial color={'black'}/>*/}
-            <MeshReflectorMaterial resolution={512} blur={[1000, 1000]} mixBlur={1} mirror={.8} color="whitesmoke"  />
+        <Plane  receiveShadow position-y={ - 15 } rotation-x={ - Math.PI * 0.5 } scale={ 20 } args={[10, 10, 128,128]}  >
+            <meshStandardMaterial color={'black'}/>
+            {/*<MeshReflectorMaterial resolution={512} blur={[1000, 1000]} mixBlur={1} mirror={.8} color="whitesmoke"  />*/}
         </Plane>
     </>
 
