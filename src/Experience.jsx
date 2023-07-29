@@ -1,17 +1,33 @@
 import {useFrame, extend, useThree} from "@react-three/fiber";
 import {useRef} from "react";
-import {Float, MeshReflectorMaterial, OrbitControls, Plane, useMatcapTexture, useTexture} from "@react-three/drei";
+import {
+    BakeShadows,
+    Float,
+    MeshReflectorMaterial,
+    OrbitControls,
+    Plane, SoftShadows,
+    useHelper,
+    useMatcapTexture,
+    useTexture
+} from "@react-three/drei";
 import Artwork from "./Components/Artwork.jsx";
-import {useControls} from "leva";
 import Wall from "./Components/Wall.jsx";
 import ArtworkVerso from "./Components/ArtworkVerso.jsx";
-import {sin} from "three/nodes";
+import * as THREE from "three"
+import {useControls} from "leva";
+
 
 extend({OrbitControls})
 
 
 export default function Experience()
 {
+    const directionalLight = useRef()
+    useHelper(directionalLight, THREE.DirectionalLightHelper, 15)
+    const { Lights } = useControls('Directional light position', {
+        Lights: { value: [77, 33, 4] }
+    })
+
     const { camera, gl } = useThree()
     const [matcapTextureSol] = useMatcapTexture('C2AB7D_4A412E_7A6B4E_F9EDBE\n', 1024)
 
