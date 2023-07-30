@@ -1,7 +1,9 @@
 import {useTexture} from '@react-three/drei';
 import {suspend} from "suspend-react";
-import {Suspense, useEffect, useState} from "react";
+import {Suspense, useContext, useEffect, useRef, useState} from "react";
 import {useControls} from "leva";
+import Experience, { GroupContext } from "../Experience.jsx";
+import {useFrame} from "@react-three/fiber";
 
 
 async function getRandomArtwork() {
@@ -68,7 +70,21 @@ function GetRandomArtwork() {
 
 
 export default function Artwork() {
+
     const [artworkData, setArtworkData] = useState(null);
+    const groupeRef = useContext(GroupContext);
+    const [rotationY, setRotationY] = useState(0);
+
+
+    useEffect(() => {
+        if (groupeRef && groupeRef.current) { // Vérifiez si groupeRef est défini et a une valeur avant d'accéder à current
+            // Accès à la rotation y du groupe
+            const currentRotationY = groupeRef.current.rotation.y;
+            setRotationY(currentRotationY);
+            console.log(currentRotationY);
+        }
+    }, [groupeRef]);
+
     useEffect(() => {
         const interval = setInterval(() => {
             getRandomArtwork().then(artworkData => {
@@ -83,9 +99,12 @@ export default function Artwork() {
     }, []);
 
 
+
+
+
     return (
         <Suspense fallback={console.log("waiting .....")}>
-            <GetRandomArtwork />
+            <GetRandomArtwork  />
         </Suspense>
     );
 }
