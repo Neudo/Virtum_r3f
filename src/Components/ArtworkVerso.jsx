@@ -72,18 +72,20 @@ export default function ArtworkVerso() {
 
     useFrame((state, delta) => {
         rotationYRef.current += delta * 0.1;
-        if(rotationYRef.current >= 3.33) {
+
+        if(rotationYRef.current >= 3.33 && !reached) {
             setReached(true);
+        }
+        if(rotationYRef.current >= 3.55){
+            setReached(false)
         }
         if(rotationYRef.current >= 6.3){
             rotationYRef.current = 0
-
         }
     });
 
     useEffect(() => {
         if (reached) {
-            console.log('ok reached verso')
             getRandomArtworkVerso().then(artworkData => {
                 setArtworkData(artworkData)
             }).catch(error => {
@@ -91,13 +93,11 @@ export default function ArtworkVerso() {
             });
             setReached(false);
         }
-    }, [artworkData]);
-
-
+    }, [reached]);
 
 
     return (
-        <Suspense fallback={console.log("waiting .....")}>
+        <Suspense >
             <GetRandomArtworkVerso/>
         </Suspense>
     );

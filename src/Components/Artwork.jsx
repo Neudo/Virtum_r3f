@@ -75,35 +75,30 @@ export default function Artwork() {
 
     useFrame((state, delta) => {
         rotationYRef.current += delta * 0.1;
-        console.log(rotationYRef.current)
-        if(rotationYRef.current >= 1.8){
+        if(rotationYRef.current >= 1.8 && !reached){
             setReached(true);
+        }
+        if(rotationYRef.current >= 2){
+            setReached(false)
         }
         if(rotationYRef.current >= 6.3){
             rotationYRef.current = 0
-
         }
     });
 
     useEffect(() => {
-        console.log('useeffect')
         if (reached) {
-            console.log("ok reached")
             getRandomArtwork().then(artworkData => {
                 setArtworkData(artworkData)
             }).catch(error => {
                 console.error('Erreur lors de la récupération de l\'artwork :', error);
             });
             setReached(false);
-
-
         }
-    }, [artworkData]);
-
-
+    }, [reached]);
 
     return (
-        <Suspense fallback={console.log("waiting .....")}>
+        <Suspense >
             <GetRandomArtwork />
         </Suspense>
     );
