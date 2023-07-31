@@ -72,8 +72,6 @@ export default function ArtworkVerso() {
 
     useFrame((state, delta) => {
         rotationYRef.current += delta * 0.1;
-        console.log(rotationYRef.current)
-
         if(rotationYRef.current >= 4.6 && !reached) {
             setReached(true);
         }
