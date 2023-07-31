@@ -33,6 +33,9 @@ export default function Experience()
     useFrame((state, delta) =>
     {
         groupeRef.current.rotation.y += delta * .1
+        if(groupeRef.current.rotation.y >= 6.33){
+            groupeRef.current.rotation.y = 0
+        }
     })
 
 

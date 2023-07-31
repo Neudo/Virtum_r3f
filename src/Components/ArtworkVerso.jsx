@@ -1,7 +1,8 @@
 import {useTexture} from '@react-three/drei';
 import { suspend } from "suspend-react";
-import {Suspense, useEffect, useState} from "react";
+import {Suspense, useEffect, useRef, useState} from "react";
 import {useControls} from "leva";
+import {useFrame} from "@react-three/fiber";
 
 
 async function getRandomArtworkVerso() {
@@ -10,7 +11,7 @@ async function getRandomArtworkVerso() {
     let artWorkFound = false;
 
     while (!artWorkFound) {
-    randomId = Math.floor(Math.random() * 100000);
+        randomId = Math.floor(Math.random() * 100000);
         const response = await fetch(`https://api.artic.edu/api/v1/artworks/${randomId}?fields=id,title,image_id,artist_display`);
         if (response.ok) {
             artWorkFound = true;
@@ -19,9 +20,6 @@ async function getRandomArtworkVerso() {
     }
     return artworkData ;
 }
-
-const delay = setInterval(getRandomArtworkVerso, 40000); // 10000 millisecondes = 10 secondes
-
 
 let nextArtworkData = null
 function callGetRandomArtworkVerso() {
@@ -58,10 +56,10 @@ function GetRandomArtworkVerso() {
     }
 
     return (<>
-        <mesh position={artWorkVersoPosition} rotation-y={Math.PI * 1} >
-            <planeGeometry args={[30, 30]} />
-            <meshStandardMaterial map={nextArtwork === null  ? imageUrl : nextImageUrl} />
-        </mesh>
+            <mesh position={artWorkVersoPosition} rotation-y={Math.PI * 1} >
+                <planeGeometry args={[30, 30]} />
+                <meshStandardMaterial map={nextArtwork === null  ? imageUrl : nextImageUrl} />
+            </mesh>
         </>
     );
 
@@ -69,22 +67,38 @@ function GetRandomArtworkVerso() {
 
 export default function ArtworkVerso() {
     const [artworkData, setArtworkData] = useState(null);
+    const rotationYRef = useRef(0);
+    const [reached, setReached] = useState(false);
+
+    useFrame((state, delta) => {
+        rotationYRef.current += delta * 0.1;
+        if(rotationYRef.current >= 3.33) {
+            setReached(true);
+        }
+        if(rotationYRef.current >= 6.3){
+            rotationYRef.current = 0
+
+        }
+    });
+
     useEffect(() => {
-        const interval = setInterval(() => {
+        if (reached) {
+            console.log('ok reached verso')
             getRandomArtworkVerso().then(artworkData => {
-                setArtworkData(artworkData); // Mettre à jour l'artworkData
+                setArtworkData(artworkData)
             }).catch(error => {
                 console.error('Erreur lors de la récupération de l\'artwork :', error);
             });
-        }, 10000); // 10000 millisecondes = 10 secondes
+            setReached(false);
+        }
+    }, [artworkData]);
 
-        // Pour arrêter l'appel de la fonction lorsque le composant est démonté
-        return () => clearInterval(interval);
-    }, []);
+
+
 
     return (
         <Suspense fallback={console.log("waiting .....")}>
-            <GetRandomArtworkVerso />
+            <GetRandomArtworkVerso/>
         </Suspense>
     );
 }

@@ -1,7 +1,8 @@
 import {useTexture} from '@react-three/drei';
 import {suspend} from "suspend-react";
-import {Suspense, useEffect, useState} from "react";
+import {Suspense, useEffect, useRef, useState} from "react";
 import {useControls} from "leva";
+import {useFrame} from "@react-three/fiber";
 
 
 async function getRandomArtwork() {
@@ -69,18 +70,36 @@ function GetRandomArtwork() {
 
 export default function Artwork() {
     const [artworkData, setArtworkData] = useState(null);
+    const rotationYRef = useRef(0);
+    const [reached, setReached] = useState(false);
+
+    useFrame((state, delta) => {
+        rotationYRef.current += delta * 0.1;
+        console.log(rotationYRef.current)
+        if(rotationYRef.current >= 1.8){
+            setReached(true);
+        }
+        if(rotationYRef.current >= 6.3){
+            rotationYRef.current = 0
+
+        }
+    });
+
     useEffect(() => {
-        const interval = setInterval(() => {
+        console.log('useeffect')
+        if (reached) {
+            console.log("ok reached")
             getRandomArtwork().then(artworkData => {
-                setArtworkData(artworkData); // Mettre à jour l'artworkData
+                setArtworkData(artworkData)
             }).catch(error => {
                 console.error('Erreur lors de la récupération de l\'artwork :', error);
             });
-        }, 10000); // 10000 millisecondes = 10 secondes
+            setReached(false);
 
-        // Pour arrêter l'appel de la fonction lorsque le composant est démonté
-        return () => clearInterval(interval);
-    }, []);
+
+        }
+    }, [artworkData]);
+
 
 
     return (
