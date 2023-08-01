@@ -1,13 +1,7 @@
 import {useFrame, extend, useThree} from "@react-three/fiber";
 import {useRef} from "react";
 import {
-    BakeShadows,
-    Environment,
-    Float, Lightformer, MeshReflectorMaterial,
-    OrbitControls,
-    Plane, SoftShadows, Stage,
-    useHelper,
-    useMatcapTexture,
+    Float, Html, OrbitControls, Plane, SoftShadows, Text, useHelper, useMatcapTexture,
 } from "@react-three/drei";
 import Artwork from "./Components/Artwork.jsx";
 import Wall from "./Components/Wall.jsx";
@@ -51,6 +45,16 @@ export default function Experience()
     })
 
 
+   const startExperience = () =>
+   {
+       let experienceStarted = false
+
+       if(!experienceStarted){
+       document.querySelector(".start-btn").classList.add('hidden')
+       }
+   }
+
+
     return <>
         <OrbitControls args={ [ camera, gl.domElement ] } />
         <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
@@ -92,10 +96,28 @@ export default function Experience()
                     <ArtworkVerso />
                 </group>
         </Float>
-        <Plane  receiveShadow position-y={ - 15 } rotation-x={ - Math.PI * 0.5 } scale={ 20 } args={[10, 10, 128,128]}  >
+        <Plane
+            onClick={startExperience}
+            receiveShadow position-y={ - 15 } rotation-x={ - Math.PI * 0.5 } scale={ 20 } args={[10, 10, 128,128]}  >
             <meshStandardMaterial color={'black'}/>
             {/*<MeshReflectorMaterial resolution={512} blur={[1000, 1000]} mixBlur={1} mirror={.2} color="whitesmoke"  />*/}
         </Plane>
+
+        <Text
+              color="white"
+              fontSize={4}
+              position={[0,50,20]}
+              rotation-x={Math.PI * -.32}
+        >
+            Virtum
+        </Text>
+
+            <Html
+                wrapperClass="start-btn"
+            >
+                Start
+            </Html>
+
     </>
 
 }

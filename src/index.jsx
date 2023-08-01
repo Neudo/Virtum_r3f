@@ -17,11 +17,9 @@ function App()
                 fov: 90,
                 near: .01,
                 fear: 100,
+                // position: [-5,4,63]
                 position: [-5,4,63]
             } } >
-                {/*<RandomizedLight castShadow amount={8} radius={4} ambient={.5} intensity={1} position={[5,5,-10]} bias={1.001} />*/}
-
-                {/*<Environment preset="city" />*/}
                 <Experience/>
                 <ambientLight intensity={.015} />
             </Canvas>

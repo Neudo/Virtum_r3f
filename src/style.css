@@ -20,3 +20,18 @@
     background-position: center center;
     background-size: cover;
 }
+
+.start-btn {
+    color: white;
+    cursor: pointer;
+    font-size: 33px;
+    font-family: sans-serif;
+    position: absolute;
+    transition: opacity 1.5s ease-in ;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important ;
+}
+.hidden{
+    opacity: 0;
+}
