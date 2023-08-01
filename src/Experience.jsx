@@ -45,15 +45,20 @@ export default function Experience()
     })
 
 
-   const startExperience = () =>
-   {
-       let experienceStarted = false
+    const startExperience = () =>
+    {
+        const startBtn = document.querySelector(".start-btn")
+        let experienceStarted = false
 
-       if(!experienceStarted){
-       document.querySelector(".start-btn").classList.add('hidden')
-       }
-   }
-
+        startBtn.addEventListener('click', () =>
+        {
+            if(!experienceStarted){
+                startBtn.classList.add('hidden')
+                experienceStarted = true
+            }
+        })
+    }
+    startExperience()
 
     return <>
         <OrbitControls args={ [ camera, gl.domElement ] } />
@@ -90,34 +95,26 @@ export default function Experience()
             speed={0}
             floatingRange={[-2,4]}
         >
-                <group ref={groupeRef} >
-                    <Artwork />
-                    <Wall/>
-                    <ArtworkVerso />
-                </group>
+            <group ref={groupeRef} >
+                <Artwork />
+                <Wall/>
+                <ArtworkVerso />
+            </group>
         </Float>
         <Plane
-            onClick={startExperience}
             receiveShadow position-y={ - 15 } rotation-x={ - Math.PI * 0.5 } scale={ 20 } args={[10, 10, 128,128]}  >
             <meshStandardMaterial color={'black'}/>
             {/*<MeshReflectorMaterial resolution={512} blur={[1000, 1000]} mixBlur={1} mirror={.2} color="whitesmoke"  />*/}
         </Plane>
 
         <Text
-              color="white"
-              fontSize={4}
-              position={[0,50,20]}
-              rotation-x={Math.PI * -.32}
+            color="white"
+            fontSize={4}
+            position={[0,50,20]}
+            rotation-x={Math.PI * -.32}
         >
             Virtum
         </Text>
-
-            <Html
-                wrapperClass="start-btn"
-            >
-                Start
-            </Html>
-
     </>
 
 }
