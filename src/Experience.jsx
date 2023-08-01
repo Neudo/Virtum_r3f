@@ -52,7 +52,6 @@ export default function Experience()
 
 
     return <>
-        <BakeShadows/>
         <OrbitControls args={ [ camera, gl.domElement ] } />
         <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
 
