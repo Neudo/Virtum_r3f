@@ -1,9 +1,11 @@
 import {useFrame, extend, useThree} from "@react-three/fiber";
 import {useRef} from "react";
 import {
-    Float,
+    BakeShadows,
+    Environment,
+    Float, Lightformer, MeshReflectorMaterial,
     OrbitControls,
-    Plane, SoftShadows,
+    Plane, SoftShadows, Stage,
     useHelper,
     useMatcapTexture,
 } from "@react-three/drei";
@@ -21,8 +23,18 @@ export default function Experience()
 {
     const directionalLight = useRef()
     useHelper(directionalLight, THREE.DirectionalLightHelper, 15)
-    const { Lights } = useControls('Directional light position', {
-        Lights: { value: [77, 33, 4] }
+    const { Lights } = useControls('Spot light Right', {
+        Lights: { value: [4, 60, 7] }
+    })
+
+    const spotLight = useRef()
+    useHelper(spotLight, THREE.SpotLightHelper, "blue")
+
+    const spotLightLeft = useRef()
+    useHelper(spotLightLeft, THREE.SpotLightHelper, 15)
+
+    const { LightLeft } = useControls('Spot light left', {
+        LightLeft: { value: [11, 60, 6] }
     })
 
     const { camera, gl } = useThree()
@@ -40,20 +52,33 @@ export default function Experience()
 
 
     return <>
+        <BakeShadows/>
         <OrbitControls args={ [ camera, gl.domElement ] } />
         <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
-        <directionalLight
-            ref={ directionalLight }
-            position={ Lights }
-            intensity={ 1.6 }
+
+        <spotLight
+            // ref={ spotLight }
             castShadow
-            shadow-mapSize={ [1024 * 2, 1024 * 2] }
-            shadow-camera-near={1}
-            // shadow-camera-far={10}
-            shadow-camera-top={ 5 }
-            shadow-camera-right={ 5 }
-            shadow-camera-bottom={ -5 }
-            shadow-camera-left={ -5 }
+            intensity={2}
+            position={Lights}
+            penumbra={1}
+            attenuation={5}
+            angle={.6}
+            decay={2}
+            shadow-mapSize={[1024*4,1024*4]}
+        />
+        <spotLight
+            // ref={ spotLightLeft }
+            castShadow
+            intensity={1.2}
+            position={LightLeft}
+            penumbra={1}
+            attenuation={.5}
+            anglePower={2}
+            angle={.7}
+            decay={2}
+            shadow-camera-near={10}
+            shadow-mapSize={[1024*4,1024*4]}
 
         />
         <Float
@@ -62,15 +87,15 @@ export default function Experience()
             speed={0}
             floatingRange={[-2,4]}
         >
-            <group ref={groupeRef} >
-                <Artwork />
-                <Wall/>
-                <ArtworkVerso />
-            </group>
+                <group ref={groupeRef} >
+                    <Artwork />
+                    <Wall/>
+                    <ArtworkVerso />
+                </group>
         </Float>
         <Plane  receiveShadow position-y={ - 15 } rotation-x={ - Math.PI * 0.5 } scale={ 20 } args={[10, 10, 128,128]}  >
             <meshStandardMaterial color={'black'}/>
-            {/*<MeshReflectorMaterial resolution={512} blur={[1000, 1000]} mixBlur={1} mirror={.8} color="whitesmoke"  />*/}
+            {/*<MeshReflectorMaterial resolution={512} blur={[1000, 1000]} mixBlur={1} mirror={.2} color="whitesmoke"  />*/}
         </Plane>
     </>
 
