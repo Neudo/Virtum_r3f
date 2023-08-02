@@ -1,5 +1,5 @@
 import {useFrame, extend, useThree} from "@react-three/fiber";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {
     CameraControls,
     Center,
@@ -58,12 +58,10 @@ export default function Experience()
 
     //Camera
     const cameraControlsRef = useRef()
-    const { camera, gl } = useThree()
+    // const { camera, gl } = useThree()
 
-    // Set the initial rotation angle to -180 degrees
     const initialRotation = -180 * DEG2RAD;
 
-// Update the rotation using useEffect hook
     useEffect(() => {
         cameraControlsRef.current?.rotate(0, initialRotation, true);
     }, []);
@@ -94,22 +92,26 @@ export default function Experience()
                 }, 1100);
 
                 setTimeout(() => {
-                    // cameraControlsRef.current?.zoom(-camera.zoom / 10, true)
                     cameraControlsRef.current?.dolly(- 5, true)
                 }, 1550);
                 setTimeout(() => {
-                    // cameraControlsRef.current?.zoom(camera.zoom / 8, true)
                     cameraControlsRef.current?.dolly(3, true)
                 }, 1750);
             }
         })
     }
     startExperience()
+    const [enabled, setEnabled] = useState(true);
+
+    const handleStart = () => {
+        setEnabled(false);
+    };
 
     return <>
         <CameraControls
             ref={cameraControlsRef}
-            // enabled={enable}
+            enabled={enabled}
+            onStart={ ()=> { handleStart() }  }
         />
         {/*<OrbitControls args={ [ camera, gl.domElement ] } />*/}
         <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
