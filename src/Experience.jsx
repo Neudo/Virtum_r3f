@@ -1,16 +1,19 @@
 import {useFrame, extend, useThree} from "@react-three/fiber";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import {
-    Float, Html, OrbitControls, Plane, SoftShadows, Text, useHelper, useMatcapTexture,
+    CameraControls,
+    Center,
+    Float, Html, OrbitControls, PerspectiveCamera, Plane, SoftShadows, Text, useHelper, useMatcapTexture,
 } from "@react-three/drei";
 import Artwork from "./Components/Artwork.jsx";
 import Wall from "./Components/Wall.jsx";
 import ArtworkVerso from "./Components/ArtworkVerso.jsx";
 import * as THREE from "three"
-import {useControls} from "leva";
+import {button, buttonGroup, folder, useControls} from "leva";
+import {DEG2RAD} from "three/src/math/MathUtils.js";
 
 
-extend({OrbitControls})
+// extend({OrbitControls})
 
 
 export default function Experience()
@@ -31,7 +34,6 @@ export default function Experience()
         LightLeft: { value: [11, 60, 6] }
     })
 
-    const { camera, gl } = useThree()
     const [matcapTextureSol] = useMatcapTexture('C2AB7D_4A412E_7A6B4E_F9EDBE\n', 1024)
 
     const groupeRef = useRef()
@@ -44,6 +46,38 @@ export default function Experience()
         }
     })
 
+    //Camera
+    const cameraControlsRef = useRef()
+    const { camera, gl } = useThree()
+
+    // Set the initial rotation angle to -180 degrees
+    const initialRotation = -180 * DEG2RAD;
+
+// Update the rotation using useEffect hook
+    useEffect(() => {
+        cameraControlsRef.current?.rotate(0, initialRotation, true);
+    }, []);
+
+    const { enabled } = useControls({
+        phiGrp: buttonGroup({
+            label: 'rotate phi',
+            opts: {
+                '+25°': () => cameraControlsRef.current?.rotate(0, 25 * DEG2RAD, true),
+                '-40°': () => cameraControlsRef.current?.rotate(0, -40 * DEG2RAD, true),
+            }
+        }),
+        setPosition: folder(
+            {
+                vec2: {value: [-5, 4, 63], label: 'vec'},
+                'setPosition(...vec)': button((get) => cameraControlsRef.current?.setPosition(...get('setPosition.vec2'), true))
+            }
+        ),
+        enabled: {value: true, label: 'controls on'}
+
+    })
+
+
+
 
     const startExperience = () =>
     {
@@ -55,13 +89,24 @@ export default function Experience()
             if(!experienceStarted){
                 startBtn.classList.add('hidden')
                 experienceStarted = true
+
+                cameraControlsRef.current?.rotate(0, 25 * DEG2RAD, true)
+                setTimeout(() => {
+                    cameraControlsRef.current?.rotate(0, 55 * DEG2RAD, true);
+                }, 1000);
+
             }
         })
     }
     startExperience()
 
     return <>
-        <OrbitControls args={ [ camera, gl.domElement ] } />
+        <CameraControls
+            // makeDefault
+            ref={cameraControlsRef}
+            // enabled={enabled}
+        />
+        {/*<OrbitControls args={ [ camera, gl.domElement ] } />*/}
         <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
 
         <spotLight
