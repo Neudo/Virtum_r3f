@@ -51,7 +51,7 @@ export default function Experience()
     useFrame((state, delta) =>
     {
         groupeRef.current.rotation.y += delta * .1
-        if(groupeRef.current.rotation.y >= 6.23){
+        if(groupeRef.current.rotation.y >= 6.27){
             groupeRef.current.rotation.y = 0
         }
     })
@@ -92,6 +92,15 @@ export default function Experience()
                 setTimeout(() => {
                     cameraControlsRef.current?.rotate(0, 55 * DEG2RAD, true);
                 }, 1100);
+
+                setTimeout(() => {
+                    // cameraControlsRef.current?.zoom(-camera.zoom / 10, true)
+                    cameraControlsRef.current?.dolly(- 5, true)
+                }, 1550);
+                setTimeout(() => {
+                    // cameraControlsRef.current?.zoom(camera.zoom / 8, true)
+                    cameraControlsRef.current?.dolly(3, true)
+                }, 1750);
             }
         })
     }
