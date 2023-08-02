@@ -27,16 +27,18 @@
     font-size: 33px;
     font-family: sans-serif;
     position: absolute;
-    transition: opacity 1.5s ease-in ;
+    transition: opacity .5s ease-in ;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
+    opacity: 0;
 }
 #mask.hidden, .hidden{
     opacity: 0;
     z-index: -999;
 }
+
 
 #mask{
     background-image: linear-gradient(0deg, #000000 0%, #191818 59%);
