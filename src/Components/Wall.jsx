@@ -14,8 +14,6 @@ export default function Wall() {
                 <boxGeometry args={wallSize} />
                 <meshStandardMaterial color="#272727" />
             </mesh>
-
-
         </>
     );
 }

@@ -58,30 +58,15 @@ export default function Experience()
         cameraControlsRef.current?.rotate(0, initialRotation, true);
     }, []);
 
-    const { enabled } = useControls({
-        phiGrp: buttonGroup({
-            label: 'rotate phi',
-            opts: {
-                '+25°': () => cameraControlsRef.current?.rotate(0, 25 * DEG2RAD, true),
-                '-40°': () => cameraControlsRef.current?.rotate(0, -40 * DEG2RAD, true),
-            }
-        }),
-        setPosition: folder(
-            {
-                vec2: {value: [-5, 4, 63], label: 'vec'},
-                'setPosition(...vec)': button((get) => cameraControlsRef.current?.setPosition(...get('setPosition.vec2'), true))
-            }
-        ),
-        enabled: {value: true, label: 'controls on'}
-
-    })
-
-
-
 
     const startExperience = () =>
     {
         const startBtn = document.querySelector(".start-btn")
+        const mask = document.getElementById('mask')
+
+        setTimeout(() => {
+            mask.classList.add('hidden')
+        }, 1000);
         let experienceStarted = false
 
         startBtn.addEventListener('click', () =>
@@ -93,7 +78,7 @@ export default function Experience()
                 cameraControlsRef.current?.rotate(0, 25 * DEG2RAD, true)
                 setTimeout(() => {
                     cameraControlsRef.current?.rotate(0, 55 * DEG2RAD, true);
-                }, 1000);
+                }, 1300);
 
             }
         })

@@ -2,8 +2,9 @@ import './reset.css'
 import './style.css'
 import {Canvas} from "@react-three/fiber";
 import {createRoot} from "react-dom/client";
-import {StrictMode, useRef} from "react";
+import {StrictMode} from "react";
 import Experience from "./Experience.jsx";
+import {Leva} from "leva";
 
 
 function App()
@@ -11,6 +12,7 @@ function App()
     return (
         <div id="canvas-container">
             <StrictMode>
+                <Leva collapsed />
             <Canvas shadows
                     camera={{
                         fov: 90,
