@@ -20,7 +20,7 @@ export default function Experience()
 {
     const spotLight = useRef()
     const { Lights } = useControls('Spot light Right', {
-        Lights: { value: [4, 60, 7] }
+        Lights: { value: [0, 60, 7] }
     })
 
     useHelper(spotLight, THREE.SpotLightHelper, "blue")
@@ -40,6 +40,9 @@ export default function Experience()
         rotationX: {value: -.88, step: .01}
     })
 
+    const { groupeRotation } = useControls('Groupe rotation', {
+        rotationY: {value: 0, step:  .01}
+    })
 
 
 
@@ -65,7 +68,6 @@ export default function Experience()
         cameraControlsRef.current?.rotate(0, initialRotation, true);
     }, []);
 
-
     const startExperience = () =>
     {
         const startBtn = document.querySelector(".start-btn")
@@ -90,7 +92,6 @@ export default function Experience()
                 setTimeout(() => {
                     cameraControlsRef.current?.rotate(0, 55 * DEG2RAD, true);
                 }, 1100);
-
             }
         })
     }
@@ -98,9 +99,8 @@ export default function Experience()
 
     return <>
         <CameraControls
-            // makeDefault
             ref={cameraControlsRef}
-            // enabled={enabled}
+            // enabled={enable}
         />
         {/*<OrbitControls args={ [ camera, gl.domElement ] } />*/}
         <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
@@ -132,11 +132,11 @@ export default function Experience()
         />
         <Float
             rotationIntensity={0}
-            floatIntensity={1}
-            speed={0}
-            floatingRange={[-2,4]}
+            floatIntensity={2}
+            speed={1}
+            floatingRange={[0,2]}
         >
-            <group ref={groupeRef} >
+            <group ref={groupeRef}>
                 <Artwork />
                 <Wall/>
                 <ArtworkVerso />

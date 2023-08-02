@@ -1,4 +1,4 @@
-import {Box} from '@react-three/drei';
+import {Box, useMatcapTexture, useTexture} from '@react-three/drei';
 import {useControls} from "leva";
 
 export default function Wall() {
@@ -8,8 +8,8 @@ export default function Wall() {
     const { wallPosition } = useControls('Wall position', {
         wallPosition: { value: [0,14,0] }
     })
-    return (<>
 
+    return (<>
             <mesh castShadow receiveShadow position={wallPosition}>
                 <boxGeometry args={wallSize} />
                 <meshStandardMaterial color="#272727" />
