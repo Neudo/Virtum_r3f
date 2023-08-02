@@ -106,14 +106,17 @@ export default function Experience()
     const handleStart = () => {
         setEnabled(false);
     };
+    const handleEnd = () => {
+        setEnabled(true)
+    }
 
     return <>
         <CameraControls
             ref={cameraControlsRef}
             enabled={enabled}
             onStart={ ()=> { handleStart() }  }
+            onEnd={ ()=> { handleEnd() }  }
         />
-        {/*<OrbitControls args={ [ camera, gl.domElement ] } />*/}
         <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
 
         <spotLight
