@@ -111,7 +111,7 @@ export default function Experience()
         setEnabled(true)
     }
 
-    // const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
     return <>
         <CameraControls
@@ -166,7 +166,7 @@ export default function Experience()
 
         <Text
             color="white"
-            fontSize={2}
+            fontSize={isMobile ? 2 : 4}
             position={position}
             rotation-x={rotationX}
         >
