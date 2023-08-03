@@ -97,7 +97,7 @@ export default function Experience()
                 }, 1550);
                 setTimeout(() => {
                     cameraControlsRef.current?.dolly(3, true)
-                }, 1750);
+                }, 1950);
             }
         })
     }
