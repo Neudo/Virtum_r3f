@@ -75,10 +75,10 @@ export default function ArtworkVerso() {
         if(rotationYRef.current >= 4.6 && !reached) {
             setReached(true);
         }
-        if(rotationYRef.current >= 4.65){
+        if(rotationYRef.current >= 3.65){
             setReached(false)
         }
-        if(rotationYRef.current >= 6.3){
+        if(rotationYRef.current >= 6.27){
             rotationYRef.current = 0
         }
     });

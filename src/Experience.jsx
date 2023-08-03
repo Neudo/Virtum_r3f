@@ -60,6 +60,7 @@ export default function Experience()
     //Camera
     const cameraControlsRef = useRef()
     // const { camera, gl } = useThree()
+    console.log(cameraControlsRef)
 
     const initialRotation = -180 * DEG2RAD;
 
@@ -67,6 +68,14 @@ export default function Experience()
         cameraControlsRef.current?.rotate(0, initialRotation, true);
     }, []);
 
+    const [enabled, setEnabled] = useState(true);
+
+    const handleStart = () => {
+        setEnabled(false);
+    };
+    const handleEnd = () => {
+        setEnabled(true)
+    }
     const startExperience = () =>
     {
         const startBtn = document.querySelector(".start-btn")
@@ -96,20 +105,12 @@ export default function Experience()
                     cameraControlsRef.current?.dolly(- 5, true)
                 }, 1550);
                 setTimeout(() => {
-                    cameraControlsRef.current?.dolly(3, true)
+                    cameraControlsRef.current?.dolly(13, true)
                 }, 1950);
             }
         })
     }
     startExperience()
-    const [enabled, setEnabled] = useState(true);
-
-    const handleStart = () => {
-        setEnabled(false);
-    };
-    const handleEnd = () => {
-        setEnabled(true)
-    }
 
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 

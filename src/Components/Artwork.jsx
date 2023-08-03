@@ -81,7 +81,7 @@ export default function Artwork() {
         if(rotationYRef.current >= 2){
             setReached(false)
         }
-        if(rotationYRef.current >= 6.3){
+        if(rotationYRef.current >= 6.27){
             rotationYRef.current = 0
         }
     });
