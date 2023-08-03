@@ -11,6 +11,7 @@ import ArtworkVerso from "./Components/ArtworkVerso.jsx";
 import * as THREE from "three"
 import {button, buttonGroup, folder, useControls} from "leva";
 import {DEG2RAD} from "three/src/math/MathUtils.js";
+import {useMediaQuery} from "react-responsive";
 
 
 // extend({OrbitControls})
@@ -110,6 +111,8 @@ export default function Experience()
         setEnabled(true)
     }
 
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+
     return <>
         <CameraControls
             ref={cameraControlsRef}
@@ -163,7 +166,7 @@ export default function Experience()
 
         <Text
             color="white"
-            fontSize={4}
+            fontSize={isMobile ? 2 : 4}
             position={position}
             rotation-x={rotationX}
         >
