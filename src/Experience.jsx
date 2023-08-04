@@ -60,7 +60,6 @@ export default function Experience()
     //Camera
     const cameraControlsRef = useRef()
     // const { camera, gl } = useThree()
-    console.log(cameraControlsRef)
 
     const initialRotation = -180 * DEG2RAD;
 
@@ -68,14 +67,6 @@ export default function Experience()
         cameraControlsRef.current?.rotate(0, initialRotation, true);
     }, []);
 
-    const [enabled, setEnabled] = useState(true);
-
-    const handleStart = () => {
-        setEnabled(false);
-    };
-    const handleEnd = () => {
-        setEnabled(true)
-    }
     const startExperience = () =>
     {
         const startBtn = document.querySelector(".start-btn")
@@ -117,9 +108,9 @@ export default function Experience()
     return <>
         <CameraControls
             ref={cameraControlsRef}
-            enabled={enabled}
-            onStart={ ()=> { handleStart() }  }
-            onEnd={ ()=> { handleEnd() }  }
+            dollySpeed={0}
+            azimuthRotateSpeed={0}
+            polarRotateSpeed={0}
         />
         <SoftShadows frustum={3.75} size={ 50 } near={9.5} samples={ 17 } rings={ 11 } />
 
