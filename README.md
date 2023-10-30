@@ -41,3 +41,6 @@ Contributions are always welcome!
 If you have any feedback or suggestions, please feel free to share.
 
 Thank you!
+
+
+Like it ? Perhaps you could [buy me a coffee](https://silly-klepon-0f5dff.netlify.app/) to say thanks ☕
